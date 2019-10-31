@@ -8,3 +8,15 @@ C:\Users\Администратор\source\repos\Ваариант14\Ваариа
 C:\Users\Администратор\source\repos\Ваариант14\Ваариант14\obj\Debug\Ваариант14.csproj.CoreCompileInputs.cache
 C:\Users\Администратор\source\repos\Ваариант14\Ваариант14\obj\Debug\Ваариант14.exe
 C:\Users\Администратор\source\repos\Ваариант14\Ваариант14\obj\Debug\Ваариант14.pdb
+C:\Users\Student.NOG\source\repos\variant14-master\Ваариант14\bin\Debug\Ваариант14.exe.config
+C:\Users\Student.NOG\source\repos\variant14-master\Ваариант14\bin\Debug\Ваариант14.exe
+C:\Users\Student.NOG\source\repos\variant14-master\Ваариант14\bin\Debug\Ваариант14.pdb
+C:\Users\Student.NOG\source\repos\variant14-master\Ваариант14\obj\Debug\Ваариант14.csprojAssemblyReference.cache
+C:\Users\Student.NOG\source\repos\variant14-master\Ваариант14\obj\Debug\Ваариант14.Form1.resources
+C:\Users\Student.NOG\source\repos\variant14-master\Ваариант14\obj\Debug\Ваариант14.Properties.Resources.resources
+C:\Users\Student.NOG\source\repos\variant14-master\Ваариант14\obj\Debug\Ваариант14.csproj.GenerateResource.cache
+C:\Users\Student.NOG\source\repos\variant14-master\Ваариант14\obj\Debug\Ваариант14.csproj.CoreCompileInputs.cache
+C:\Users\Student.NOG\source\repos\variant14-master\Ваариант14\obj\Debug\Ваариант14.exe
+C:\Users\Student.NOG\source\repos\variant14-master\Ваариант14\obj\Debug\Ваариант14.pdb
+C:\Users\Student.NOG\source\repos\variant14-master\Ваариант14\obj\Debug\Ваариант14.Menu_men.resources
+C:\Users\Администратор\source\repos\Ваариант14\Ваариант14\obj\Debug\Ваариант14.Menu_men.resources

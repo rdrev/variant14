@@ -37,7 +37,7 @@ namespace Ваариант14
 
         private async void sql_zapros()
         {
-            string ConnStr = @"Data Source=БАБУШКА-ПК\CENTAUR;Initial Catalog=Variant14;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+            string ConnStr = @"Data Source=БАБУШКА-ПК\CENTAUR;Initial Catalog=Variant14;User ID=work;Password=1954";
 
             sqlConn = new SqlConnection(ConnStr); 
 

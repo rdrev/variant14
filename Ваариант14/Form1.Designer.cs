@@ -103,7 +103,7 @@
             this.Controls.Add(this.PasswordBox);
             this.Controls.Add(this.vxod);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Авторизация";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
