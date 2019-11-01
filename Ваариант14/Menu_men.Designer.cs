@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Menu_men));
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.инструментыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.обновитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.справкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -44,11 +44,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this.ZKBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.listBox1 = new System.Windows.Forms.ListBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.label4 = new System.Windows.Forms.Label();
+            this.listView1 = new System.Windows.Forms.ListView();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.обновитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -63,7 +61,7 @@
             this.справкаToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1604, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1279, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -80,6 +78,13 @@
             this.инструментыToolStripMenuItem.Name = "инструментыToolStripMenuItem";
             this.инструментыToolStripMenuItem.Size = new System.Drawing.Size(95, 20);
             this.инструментыToolStripMenuItem.Text = "Инструменты";
+            // 
+            // обновитьToolStripMenuItem
+            // 
+            this.обновитьToolStripMenuItem.Name = "обновитьToolStripMenuItem";
+            this.обновитьToolStripMenuItem.Size = new System.Drawing.Size(128, 22);
+            this.обновитьToolStripMenuItem.Text = "Обновить";
+            this.обновитьToolStripMenuItem.Click += new System.EventHandler(this.ОбновитьToolStripMenuItem_Click);
             // 
             // справкаToolStripMenuItem
             // 
@@ -105,14 +110,13 @@
             // tabPage1
             // 
             this.tabPage1.Controls.Add(this.pictureBox1);
-            this.tabPage1.Controls.Add(this.label4);
+            this.tabPage1.Controls.Add(this.listView1);
             this.tabPage1.Controls.Add(this.comboBox1);
             this.tabPage1.Controls.Add(this.label3);
             this.tabPage1.Controls.Add(this.streetBox);
             this.tabPage1.Controls.Add(this.label1);
             this.tabPage1.Controls.Add(this.ZKBox);
             this.tabPage1.Controls.Add(this.label2);
-            this.tabPage1.Controls.Add(this.listBox1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -144,7 +148,7 @@
             // 
             // streetBox
             // 
-            this.streetBox.Location = new System.Drawing.Point(923, 22);
+            this.streetBox.Location = new System.Drawing.Point(159, 87);
             this.streetBox.Name = "streetBox";
             this.streetBox.Size = new System.Drawing.Size(254, 20);
             this.streetBox.TabIndex = 9;
@@ -152,7 +156,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(772, 23);
+            this.label1.Location = new System.Drawing.Point(8, 88);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(130, 13);
             this.label1.TabIndex = 8;
@@ -160,7 +164,7 @@
             // 
             // ZKBox
             // 
-            this.ZKBox.Location = new System.Drawing.Point(471, 21);
+            this.ZKBox.Location = new System.Drawing.Point(159, 53);
             this.ZKBox.Name = "ZKBox";
             this.ZKBox.Size = new System.Drawing.Size(254, 20);
             this.ZKBox.TabIndex = 7;
@@ -168,20 +172,11 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(361, 22);
+            this.label2.Location = new System.Drawing.Point(8, 56);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(104, 13);
             this.label2.TabIndex = 6;
             this.label2.Text = "показать дома ЖК";
-            // 
-            // listBox1
-            // 
-            this.listBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(3, 86);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(1761, 498);
-            this.listBox1.TabIndex = 0;
             // 
             // tabPage2
             // 
@@ -193,38 +188,32 @@
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // label4
+            // listView1
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(8, 70);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(793, 13);
-            this.label4.TabIndex = 12;
-            this.label4.Text = resources.GetString("label4.Text");
+            this.listView1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.listView1.HideSelection = false;
+            this.listView1.Location = new System.Drawing.Point(3, 153);
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(1761, 431);
+            this.listView1.TabIndex = 14;
+            this.listView1.UseCompatibleStateImageBehavior = false;
             // 
             // pictureBox1
             // 
             this.pictureBox1.Enabled = false;
             this.pictureBox1.Image = global::Ваариант14.Properties.Resources.logo;
-            this.pictureBox1.Location = new System.Drawing.Point(1422, 14);
+            this.pictureBox1.Location = new System.Drawing.Point(875, 6);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(166, 66);
+            this.pictureBox1.Size = new System.Drawing.Size(388, 141);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 13;
+            this.pictureBox1.TabIndex = 15;
             this.pictureBox1.TabStop = false;
-            // 
-            // обновитьToolStripMenuItem
-            // 
-            this.обновитьToolStripMenuItem.Name = "обновитьToolStripMenuItem";
-            this.обновитьToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.обновитьToolStripMenuItem.Text = "Обновить";
-            this.обновитьToolStripMenuItem.Click += new System.EventHandler(this.ОбновитьToolStripMenuItem_Click);
             // 
             // Menu_men
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1604, 642);
+            this.ClientSize = new System.Drawing.Size(1279, 642);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
@@ -259,9 +248,8 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox ZKBox;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ListBox listBox1;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.ToolStripMenuItem обновитьToolStripMenuItem;
+        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }

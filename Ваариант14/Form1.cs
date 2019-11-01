@@ -37,7 +37,7 @@ namespace Ваариант14
 
         private async void sql_zapros()
         {
-            string ConnStr = @"Data Source=БАБУШКА-ПК\CENTAUR;Initial Catalog=Variant14;User ID=work;Password=1954";
+            string ConnStr = @"Data Source=62.63.74.62,1433;Initial Catalog=Variant14;User ID=work;Password=1954";
 
             sqlConn = new SqlConnection(ConnStr); 
 
@@ -67,7 +67,6 @@ namespace Ваариант14
 
                 if (proverka != 0 && proverkaMen == true)
                 {
-                    // Create a new instance of the Form2 class
                     Menu_men settingsForm = new Menu_men();
 
                     settingsForm.Show();
@@ -81,7 +80,7 @@ namespace Ваариант14
                 else if (proverka != 0 && proverkaMen == false)
                 {
                     // Create a new instance of the Form2 class
-                    Menu_ispol settingsForm = new Menu_ispol();
+                    Menu_ispol settingsForm = new Menu_ispol(sqlConn);
 
                     settingsForm.Show();
 

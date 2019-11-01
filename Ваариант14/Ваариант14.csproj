@@ -74,6 +74,9 @@
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Menu_ispol.resx">
+      <DependentUpon>Menu_ispol.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Menu_men.resx">
       <DependentUpon>Menu_men.cs</DependentUpon>
     </EmbeddedResource>
