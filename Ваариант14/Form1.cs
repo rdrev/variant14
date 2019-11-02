@@ -22,13 +22,8 @@ namespace Ваариант14
 
         public static class Glab
         {
-            public static string login;
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
+            public static string login;//хранение логина пользователя 
+        }//метод глобальных переменых
 
         private void vxod_Click(object sender, EventArgs e)
         {
@@ -37,35 +32,35 @@ namespace Ваариант14
 
         private async void sql_zapros()
         {
-            string ConnStr = @"Data Source=62.63.74.62,1433;Initial Catalog=Variant14;User ID=work;Password=1954";
+            string ConnStr = @"Data Source=62.63.74.62,1433;Initial Catalog=Variant14;User ID=work;Password=1954";//строка подключения 
 
-            sqlConn = new SqlConnection(ConnStr); 
+            sqlConn = new SqlConnection(ConnStr); //Создание подключения 
 
-            await sqlConn.OpenAsync();
+            await sqlConn.OpenAsync();//открытие подключение
 
-            SqlDataReader sqlRead = null;
+            SqlDataReader sqlRead = null;//переменая для вывода запроса
 
-            int proverka = 0;
-            bool proverkaMen = false;
+            int proverka = 0;//счетчек на количество ответов 
+            bool proverkaMen = false;//переменая для записи статуса 
 
-            SqlCommand comed = new SqlCommand("SELECT * FROM [Avtoris] WHERE [login] = @log AND [password] = @pass", sqlConn);
-            comed.Parameters.AddWithValue("@log", LoginBox.Text);
+            SqlCommand comed = new SqlCommand("SELECT * FROM [Avtoris] WHERE [login] = @log AND [password] = @pass", sqlConn);//запрос на ноличиее пользователя 
+            comed.Parameters.AddWithValue("@log", LoginBox.Text);//иннициация переменых 
             comed.Parameters.AddWithValue("@pass", PasswordBox.Text);
 
             try
             {
-                sqlRead = await comed.ExecuteReaderAsync();
+                sqlRead = await comed.ExecuteReaderAsync();//запрос в базу
 
-                while (await sqlRead.ReadAsync())
+                while (await sqlRead.ReadAsync())//проверка на ответ
                 {
-                    if ((bool)sqlRead["dostup"] == true)
+                    if ((bool)sqlRead["dostup"] == true)//проверка на статус пользователя
                         proverkaMen = true;
                     proverka++;
 
-                    Glab.login = LoginBox.Text;
+                    Glab.login = LoginBox.Text;//сохраняем логин 
                 }
 
-                if (proverka != 0 && proverkaMen == true)
+                if (proverka != 0 && proverkaMen == true)//открытие окна менеджера 
                 {
                     Menu_men settingsForm = new Menu_men();
 
@@ -77,9 +72,8 @@ namespace Ваариант14
                     this.Hide();
 
                 }
-                else if (proverka != 0 && proverkaMen == false)
+                else if (proverka != 0 && proverkaMen == false)//открытие окна пользователя
                 {
-                    // Create a new instance of the Form2 class
                     Menu_ispol settingsForm = new Menu_ispol(sqlConn);
 
                     settingsForm.Show();
@@ -90,7 +84,7 @@ namespace Ваариант14
                     this.Hide();
 
                 }
-                else
+                else//вывод собшение об отчуствие пользователя
                 {
                     MessageBox.Show(
                           "Неверное имя пользователя или ты пытаешся его взломать",
@@ -115,14 +109,14 @@ namespace Ваариант14
                 if (sqlRead != null)
                     sqlRead.Close();
             }
-        }
+        }//запрос на вход
 
         private void Form1_FormClosing(Object sender, FormClosingEventArgs e)
         {
             Clos_Avtoris();
         }
 
-        public void Clos_Avtoris()
+        public void Clos_Avtoris()//закрытие подключение
         {
             if (sqlConn != null && sqlConn.State != ConnectionState.Closed)
                 sqlConn.Close();

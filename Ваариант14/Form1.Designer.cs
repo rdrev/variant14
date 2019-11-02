@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.vxod = new System.Windows.Forms.Button();
             this.PasswordBox = new System.Windows.Forms.TextBox();
             this.LoginBox = new System.Windows.Forms.TextBox();
@@ -52,6 +53,7 @@
             // 
             this.PasswordBox.Location = new System.Drawing.Point(112, 71);
             this.PasswordBox.Name = "PasswordBox";
+            this.PasswordBox.PasswordChar = '*';
             this.PasswordBox.Size = new System.Drawing.Size(100, 20);
             this.PasswordBox.TabIndex = 1;
             // 
@@ -83,7 +85,7 @@
             // pictureBox1
             // 
             this.pictureBox1.Enabled = false;
-            this.pictureBox1.Image = global::Ваариант14.Properties.Resources.logo;
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.Location = new System.Drawing.Point(3, 108);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(148, 66);
@@ -102,6 +104,8 @@
             this.Controls.Add(this.LoginBox);
             this.Controls.Add(this.PasswordBox);
             this.Controls.Add(this.vxod);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.Text = "Авторизация";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
