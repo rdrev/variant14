@@ -32,7 +32,10 @@ namespace Ваариант14
 
         private async void sql_zapros()
         {
-            string ConnStr = @"Data Source=62.63.74.62,1433;Initial Catalog=Variant14;User ID=work;Password=1954";//строка подключения 
+            string ConnStr = @"Data Source=62.63.74.62,1433;
+                                Initial Catalog=Variant14;
+                                User ID=work;
+                                Password=1954";//строка подключения 
 
             sqlConn = new SqlConnection(ConnStr); //Создание подключения 
 

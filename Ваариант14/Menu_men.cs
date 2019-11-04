@@ -18,9 +18,16 @@ namespace Ваариант14
         public static class Glab
             //метод глобальных переменых
         {
-            public static List<int> idList = new List<int>();
-            public static List<string> str = new List<string>();
-            public static int id = 0;//хранение логина пользователя 
+            public static List<int> idResidentialComplexList = new List<int>();
+            public static List<int> idHouseList = new List<int>();
+
+            public static List<string> strResidentialComplex = new List<string>();
+            public static List<string> strHouse = new List<string>();
+
+            public static int idHouse = 0;
+            public static int idResidentialComplex = 0;
+
+            public static List<string> id = new List<string>();
         }
 
         public Menu_men()
@@ -70,24 +77,30 @@ namespace Ваариант14
 
             listView2.View = View.Details;//отображения текста
 
-            
+
+           // listView2.Columns.Add("жилой комплекс");
+            listView2.Columns.Add("номер дома");
             listView2.Columns.Add("номер квартиры");
+            listView2.Columns.Add("подезд");
+            listView2.Columns.Add("этаж");
             listView2.Columns.Add("площади квартиры");
             listView2.Columns.Add("количества комнат");
+            listView2.Columns.Add("статус");
             listView2.Columns.Add("стоимость строительства");
             listView2.Columns.Add("добавленная стоимость");
-            listView2.Columns.Add("стоимость квартиры ");
             //добоаляем название столбы
 
             obnov();//запускаем загрузку даных 
         }
        
-    
-        private async void obnov()
+        ////////////////////////////////////////////////////////////////////////////////////////
+
+        private void obnov()
             //запускаем загрузку даных 
         {
-            await HouseObnov();//метод для загрузки таблици с домами
-            await ApartmentObnov();//метод для загрузки таблици с квартирами
+           HouseObnov();//метод для загрузки таблици с домами
+           ApartmentFilitr();//метод для настройки фильтра
+                  ApartmentObnov();//метод для загрузки таблици с квартирами
         }
         private void ОбновитьToolStripMenuItem_Click(object sender, EventArgs e)
             //кнопка для обновление даных
@@ -95,8 +108,10 @@ namespace Ваариант14
             obnov();
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////
 
-        private async Task HouseObnov()
+
+        private void HouseObnov()
             //метод для загрузки таблици с домами
         {
             listView1.Items.Clear();//очишаем таблицу 
@@ -212,10 +227,10 @@ namespace Ваариант14
 
             try
             {
-                sqlRead = await comend.ExecuteReaderAsync();//создаем запрос
+                sqlRead = comend.ExecuteReader();//создаем запрос
 
 
-                while (await sqlRead.ReadAsync())
+                while (sqlRead.Read())
                 {
                     House.Add(Convert.ToString(sqlRead["Name"]));
                     Street.Add(Convert.ToString(sqlRead["Street"]));
@@ -233,11 +248,11 @@ namespace Ваариант14
 
                 foreach (SqlCommand comm in comendProdono)
                 {
-                    Prodono.Add(await comm.ExecuteScalarAsync());//находим количество проданых домов
+                    Prodono.Add(comm.ExecuteScalar());//находим количество проданых домов
                 }
                 foreach (SqlCommand comm in comendNoProdono)
                 {
-                    NoProdono.Add(await comm.ExecuteScalarAsync());//находим количество не проданых домов
+                    NoProdono.Add(comm.ExecuteScalar());//находим количество не проданых домов
                 }
                 for (int i = 0; i < House.Count; i++)
                     listView1.Items.Add
@@ -264,14 +279,19 @@ namespace Ваариант14
 
             }
         }
-        private async void ComboBox1_SelectedIndexChanged(object sender, System.EventArgs e)
+        private void ComboBox1_SelectedIndexChanged(object sender, System.EventArgs e)
             //обновление таблицы при изменением комбобокса
         {
-            await HouseObnov();
+            HouseObnov();
         }
 
-        private async Task ApartmentObnov()
-            //метод для загрузки в комбобокс
+       
+        
+        ////////////////////////////////////////////////////////////////////////////////////////
+
+
+        private void ApartmentFilitr()//
+        //метод для загрузки в комбобокс
         {
             comboBox3.Visible = false;
             comboBox4.Visible = false;
@@ -287,19 +307,33 @@ namespace Ваариант14
 
             comboBox2.Items.Clear();//очишаем
 
+            Glab.idHouseList.Clear();
+            Glab.idResidentialComplexList.Clear();
+            Glab.strHouse.Clear();
+            Glab.strResidentialComplex.Clear();
+            //очищаем спарвачники
+
+
             SqlDataReader sqlRead = null;//перемеена для хранение вывода  запроса
 
             SqlCommand comend = new SqlCommand();//перемеена для хранение  запроса
 
-            comend = new SqlCommand("SELECT DISTINCT [Name]" +
+            comend = new SqlCommand("SELECT DISTINCT [ID], [Name]" +
                 " FROM [ResidentialComplex]", sqlConn);
             //команда зпроса
 
-            sqlRead = await comend.ExecuteReaderAsync();//запрос в базу
+            sqlRead = comend.ExecuteReader();//запрос в базу
 
-            while (await sqlRead.ReadAsync())
+            comboBox2.Items.Add("");//вставлем пустую строку как выбор нечиго
+
+            while (sqlRead.Read())
+            {
                 comboBox2.Items.Add(Convert.ToString(sqlRead["Name"]));//выводим название ЖК в комбобокс
-            
+
+                Glab.strResidentialComplex.Add(Convert.ToString(sqlRead["Name"]));//Записаваем список ЖК для справки
+
+                Glab.idResidentialComplexList.Add(Convert.ToInt32(sqlRead["ID"]));//Записаваем список ID ЖК для справки
+            }
 
             sqlRead.Close();//закрываем вывод
         }
@@ -317,26 +351,43 @@ namespace Ваариант14
             label6.Visible = true;
             //показываем поле
 
-            comend = new SqlCommand("SELECT DISTINCT [House].[ID], [Street], [Number]" +
-                " FROM [House], [ResidentialComplex]" +
-                "WHERE [Name] = @name", sqlConn);
+            int id = 0;//переменая для счета
+
+            foreach (int i in Glab.idResidentialComplexList)
+            {
+                if("" == comboBox2.Text)//провареем не выбрано ли пусто
+                    break;
+               else if (Glab.strResidentialComplex[id] == comboBox2.Text)//находим выбраный ЖК
+                    break;
+
+                id++;//вычеслем id выброного ЖК
+            }
+
+            id++;
+
+            Glab.idResidentialComplex = id;//Хроним id выброного ЖК для последоешива вывлда информачи 
+
+            comend = new SqlCommand("SELECT DISTINCT  [ID], [Street], [Number]" +
+                " FROM [House]" +
+                "WHERE [ResidentialComplexID] = @name", sqlConn);
             //команда запроса
-            comend.Parameters.AddWithValue("@name", comboBox2.Text);//водим параметор
+            comend.Parameters.AddWithValue("@name", id);//водим параметор
 
             if (sqlRead != null)
                 sqlRead.Close();//проверка на откратасть 
 
             sqlRead = comend.ExecuteReader();//запрос в базу
 
-            
+            comboBox3.Items.Add("");//вставлем пустую строку как выбор нечиго
+
             while (sqlRead.Read())
             {
                 comboBox3.Items.Add("ул." + Convert.ToString(sqlRead["Street"])
                     + " д." + Convert.ToString(sqlRead["Number"]));//запись в кобобобокс
 
-                Glab.idList.Add(Convert.ToInt32(sqlRead["ID"]));//запись id
+                Glab.idHouseList.Add(Convert.ToInt32(sqlRead["ID"]));//запись id
 
-                Glab.str.Add("ул." + Convert.ToString(sqlRead["Street"])
+                Glab.strHouse.Add("ул." + Convert.ToString(sqlRead["Street"])
                     + " д." + Convert.ToString(sqlRead["Number"]));//запись справачника
             }
 
@@ -350,21 +401,28 @@ namespace Ваариант14
             SqlCommand comend = new SqlCommand();//перемеена для хранение вывода  запроса
 
             comboBox4.Items.Clear();//очишаем таблицу
+            comboBox6.Items.Clear();//очишаем таблицу
 
+            int id = 0;//переменая для счета
 
-            foreach (int i in Glab.idList)
+            foreach (int i in Glab.idHouseList)
             {
-                if (Glab.str[Glab.id] == comboBox3.Text) 
+                if ("" == comboBox3.Text)//провареем не выбрано ли пусто
+                    break;
+                else if (Glab.strHouse[id] == comboBox3.Text)//находим выбраный дома
                     break;
 
-                Glab.id++;//вычеслем id выброного дома
+                id++;//вычеслем id выброного дома
             }
+
+            Glab.idHouse = Convert.ToInt32(Glab.idHouseList[id]);//записаваем id выброного дома из спарвочника для последуещего вывода 
+
 
             comend = new SqlCommand("SELECT DISTINCT [Floor]" +
                 " FROM  [Apartment]" +
                 "WHERE [HouseID] = @House"
                 , sqlConn);//команда запроса
-            comend.Parameters.AddWithValue("@House", Glab.id);//водим параметор
+            comend.Parameters.AddWithValue("@House", Glab.idHouse);//водим параметор
 
 
             if (sqlRead != null)
@@ -372,6 +430,7 @@ namespace Ваариант14
 
             sqlRead = comend.ExecuteReader();//запрос в базу
 
+            comboBox4.Items.Add("");//вставлем пустую строку как выбор нечиго
 
             while (sqlRead.Read())
                 comboBox4.Items.Add(Convert.ToString(sqlRead["Floor"]));
@@ -388,67 +447,249 @@ namespace Ваариант14
                 " FROM  [Apartment]" +
                 "WHERE [HouseID] = @House"
                 , sqlConn);//водим параметор
-            comend.Parameters.AddWithValue("@House", Glab.id);//водим параметор
+            comend.Parameters.AddWithValue("@House", Glab.idHouse);//водим параметор
 
             if (sqlRead != null)
                 sqlRead.Close();//проверка на откратасть 
 
             sqlRead =comend.ExecuteReader();//запрос в базу
 
-
+            comboBox6.Items.Add("");
+            //вставлем пустую строку как выбор нечиго
             while (sqlRead.Read())
                 comboBox6.Items.Add(Convert.ToString(sqlRead["Section"]));
             // запись в кобобобокс
 
             comboBox5.Visible = true;
             comboBox6.Visible = true;
+            label7.Visible = true;
+            label8.Visible = true;
             //показываем поле
 
             sqlRead.Close();//закрываем запрс
         }
-        private void ApartmentButton_Click(object sender, EventArgs e)
-        {
-            listView2.Items.Clear();//очишаем таблицу
 
+       
+        
+        
+        ////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+        private void ApartmentObnov()
+        {
             SqlDataReader sqlRead = null;
 
-            SqlCommand comend = new SqlCommand(
-                "SELECT [Number], [Area], [CountOfRooms], [BuildingCost], [ApartmentValueAdded]" +
-                 "FROM [Apartment]" +
-                 "WHERE [HouseID] = @house AND [Section] = @section AND [Floor] = @floor AND [IsSold] = @isSold",
-                  sqlConn);
+            listView2.Items.Clear();//очишаем таблицу
+
+            string commendProto = "SELECT  DISTINCT " +
+                                    "[HouseID] ," +
+                                 " [Number] AS [kvart], " +
+                                  "[Section] ," +
+                                  "[Floor]  ," +
+                                 "[Area]," +
+                                 " [CountOfRooms]," +
+                                 " [IsSold]," +
+                                 " [BuildingCost] AS [Building]," +
+                                 " [ApartmentValueAdded] AS [ValueAdded]" +
+
+                                 "FROM [Apartment]";
+            //прототип запроса
+
+            SqlCommand comend = new SqlCommand();
             //команда зпроса
 
+            if (comboBox2.SelectedIndex > 0)
+            {
 
-            comend.Parameters.AddWithValue("house", Glab.id);
-            comend.Parameters.AddWithValue("section", comboBox6.Text);
-            comend.Parameters.AddWithValue("floor", comboBox4.Text);
-            
-            if (comboBox5.Text == "Да")
-                comend.Parameters.AddWithValue("isSold", true);
+                if (comboBox3.SelectedIndex > 0)//если выбрали дом 
+                {
+                    if (comboBox4.SelectedIndex > 0 &&
+                        comboBox5.SelectedIndex > 0 &&
+                        comboBox6.SelectedIndex > 0)
+                    {
+                        comend = new SqlCommand(
+                                    commendProto +
+                                    "WHERE [Apartment].[HouseID] = @house AND [Section] = @section AND [Floor] = @floor AND [IsSold] = @isSold",
+                                     sqlConn);
+
+                        comend.Parameters.AddWithValue("house", Glab.idHouse);
+                        comend.Parameters.AddWithValue("section", comboBox6.Text);
+                        comend.Parameters.AddWithValue("floor", comboBox4.Text);
+
+                        if (comboBox5.Text == "Да")
+                            comend.Parameters.AddWithValue("isSold", true);
+                        else
+                            comend.Parameters.AddWithValue("isSold", false);
+                        //водим параметор
+                    }
+                    //если выбрали все поля 
+
+                    else if (comboBox5.SelectedIndex > 0 &&
+                       comboBox6.SelectedIndex > 0)
+                    {
+                        comend = new SqlCommand(
+                                   commendProto +
+                                    "WHERE [Apartment].[HouseID] = @house AND [Section] = @section AND [IsSold] = @isSold",
+                                     sqlConn);
+
+                        comend.Parameters.AddWithValue("house", Glab.idHouse);
+                        comend.Parameters.AddWithValue("section", comboBox6.Text);
+
+                        if (comboBox5.Text == "Да")
+                            comend.Parameters.AddWithValue("isSold", true);
+                        else
+                            comend.Parameters.AddWithValue("isSold", false);
+                        //водим параметор
+                    }
+                    //если выбрали все поля кроме этожа
+
+                    else if (comboBox4.SelectedIndex > 0 &&
+                       comboBox5.SelectedIndex > 0)
+                    {
+                        comend = new SqlCommand(
+                                  commendProto +
+                                    "WHERE [Apartment].[HouseID] = @house AND [Floor] = @floor AND [IsSold] = @isSold",
+                                     sqlConn);
+
+                        comend.Parameters.AddWithValue("house", Glab.idHouse);
+                        comend.Parameters.AddWithValue("floor", comboBox4.Text);
+
+                        if (comboBox5.Text == "Да")
+                            comend.Parameters.AddWithValue("isSold", true);
+                        else
+                            comend.Parameters.AddWithValue("isSold", false);
+                        //водим параметор
+                    }
+                    //если выбрали все поля кроме подъезда 
+
+                    else if (comboBox4.SelectedIndex > 0
+                        && comboBox6.SelectedIndex > 0)//если выбрали все остольные поля статуса
+                    {
+                        comend = new SqlCommand(
+                            commendProto +
+                                     "WHERE [Apartment].[HouseID] = @house AND [Section] = @section AND [Floor] = @floor",
+                                        sqlConn);
+                        //команда зпроса
+
+                        comend.Parameters.AddWithValue("house", Glab.idHouse);
+                        comend.Parameters.AddWithValue("section", comboBox6.Text);
+                        comend.Parameters.AddWithValue("floor", comboBox4.Text);
+                        //водим параметор
+
+                    }
+                    //если выбрали все поля кроме статуса 
+
+
+                    else if (comboBox4.SelectedIndex > 0)
+                    {
+                        comend = new SqlCommand(
+                                    commendProto +
+                                    "WHERE [Apartment].[HouseID] = @house AND [Floor] = @floor",
+                                     sqlConn);
+
+                        comend.Parameters.AddWithValue("house", Glab.idHouse);
+                        comend.Parameters.AddWithValue("floor", comboBox4.Text);
+                        //водим параметор
+                    }
+                    //если выбрали только этаж
+
+                    else if (comboBox6.SelectedIndex > 0)
+                    {
+                        comend = new SqlCommand(
+                             commendProto +
+                                    "WHERE [Apartment].[HouseID] = @house AND [Section] = @section",
+                                     sqlConn);
+
+                        comend.Parameters.AddWithValue("house", Glab.idHouse);
+                        comend.Parameters.AddWithValue("section", comboBox6.Text);
+                        //водим параметор
+                    }
+                    //если выбрали только подъезд
+
+                    else if (comboBox5.SelectedIndex > 0)
+                    {
+                        comend = new SqlCommand(
+                              commendProto +
+                                   "WHERE [Apartment].[HouseID] = @house AND [IsSold] = @isSold",
+                                     sqlConn);
+
+                        comend.Parameters.AddWithValue("house", Glab.idHouse);
+
+                        if (comboBox5.Text == "Да")
+                            comend.Parameters.AddWithValue("isSold", true);
+                        else if (comboBox5.Text == "Нет")
+                            comend.Parameters.AddWithValue("isSold", false);
+                        //водим параметор
+                    }
+                    //если выбрали только статус
+
+                    else
+                    {
+                        comend = new SqlCommand(
+                                   commendProto +
+                                        "WHERE [Apartment].[HouseID] = @house ",
+                                         sqlConn);
+
+                        comend.Parameters.AddWithValue("house", Glab.idHouse);
+                        //водим параметор
+                        //если выбрали только этаж
+                    }
+                    //есл не эказали остальные праметры
+                }
+
+                else
+                {
+                    comend = new SqlCommand(
+                                    "SELECT  DISTINCT " +
+                                    "[HouseID] ," +
+                                     " [Apartment].[Number] AS [kvart], " +
+                                      "[Section] ," +
+                                      "[Floor]  ," +
+                                     "[Area]," +
+                                     " [CountOfRooms]," +
+                                     " [IsSold]," +
+                                     " [Apartment].[BuildingCost] AS [Building]," +
+                                     " [ApartmentValueAdded] AS [ValueAdded]" +
+
+                                     "FROM [Apartment],[House]" +
+                                     "WHERE [ResidentialComplexID] = @ID",
+                                     sqlConn);
+
+                    comend.Parameters.AddWithValue("ID", Glab.idResidentialComplex);
+                }
+            }
+
             else
-                comend.Parameters.AddWithValue("isSold", false);
-            //водим параметор
+                comend = new SqlCommand(
+                                commendProto,
+                                 sqlConn);
 
             sqlRead = comend.ExecuteReader();//запрос в базу
-
 
             while (sqlRead.Read())
             {
                 listView2.Items.Add
                       (new ListViewItem(new string[]
                           {
-                              Convert.ToString(sqlRead["Number"]),
+                             Convert.ToString(sqlRead["HouseID"]),
+                              Convert.ToString(sqlRead["kvart"]),
+                              Convert.ToString(sqlRead["Section"]),
+                              Convert.ToString(sqlRead["Floor"]),
                               Convert.ToString(sqlRead["Area"]),
                               Convert.ToString(sqlRead["CountOfRooms"]),
-                              Convert.ToString(sqlRead["BuildingCost"]),
-                              Convert.ToString(sqlRead["ApartmentValueAdded"]),
-                               Convert.ToString(Convert.ToInt32(sqlRead["BuildingCost"]) + Convert.ToInt32(sqlRead["ApartmentValueAdded"]))
+                              Convert.ToString(sqlRead["IsSold"]),
+                              Convert.ToString(sqlRead["Building"]),
+                              Convert.ToString(sqlRead["ValueAdded"])
                         })//водим результат в таблицу 
                       );
             }
             if (sqlRead != null)
                 sqlRead.Close();//проверка на откратасть 
+        }
+        private void ApartmentButton_Click(object sender, EventArgs e)
+        {
+            ApartmentObnov();
         }
     }
 }
