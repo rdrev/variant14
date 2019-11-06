@@ -75,18 +75,6 @@ namespace Ваариант14
                     this.Hide();
 
                 }
-                else if (proverka != 0 && proverkaMen == false)//открытие окна пользователя
-                {
-                    Menu_ispol settingsForm = new Menu_ispol(sqlConn);
-
-                    settingsForm.Show();
-
-                    if (sqlConn != null && sqlConn.State != ConnectionState.Closed)
-                        sqlConn.Close();
-
-                    this.Hide();
-
-                }
                 else//вывод собшение об отчуствие пользователя
                 {
                     MessageBox.Show(

@@ -52,11 +52,11 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Menu_ispol.cs">
+    <Compile Include="Update.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Menu_ispol.Designer.cs">
-      <DependentUpon>Menu_ispol.cs</DependentUpon>
+    <Compile Include="Update.Designer.cs">
+      <DependentUpon>Update.cs</DependentUpon>
     </Compile>
     <Compile Include="Menu_men.cs">
       <SubType>Form</SubType>
@@ -74,8 +74,8 @@
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Menu_ispol.resx">
-      <DependentUpon>Menu_ispol.cs</DependentUpon>
+    <EmbeddedResource Include="Update.resx">
+      <DependentUpon>Update.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menu_men.resx">
       <DependentUpon>Menu_men.cs</DependentUpon>

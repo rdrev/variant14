@@ -16,7 +16,7 @@ namespace Ваариант14
         SqlConnection sqlConn;
 
         public static class Glab
-            //метод глобальных переменых
+        //метод глобальных переменых
         {
             public static List<int> idResidentialComplexList = new List<int>();
             public static List<int> idHouseList = new List<int>();
@@ -28,6 +28,25 @@ namespace Ваариант14
             public static int idResidentialComplex = 0;
 
             public static List<string> id = new List<string>();
+
+            public static List<int>  Otsenka_IdApartment_List= new List<int>();
+            public static List<int> Otsenka_IdHouse_List = new List<int>();
+            public static List<int> Otsenka_IdResidentialComplex_List = new List<int>();
+
+            public static List<int> Otsenka_CountOfRooms_List = new List<int>();
+            public static List<int> Otsenka_Area_List = new List<int>();
+            public static List<string> Otsenka_IsSold_List = new List<string>();
+
+            public static List<int> Otsenka_ApartmentBuilding_List = new List<int>();
+            public static List<int> Otsenka_ApartmentValueAdded_List = new List<int>();
+
+            public static List<int> Otsenka_HouseBuilding_List = new List<int>();
+            public static List<int> Otsenka_HouseValueAdded_List = new List<int>();
+
+            public static List<int> Otsenka_ResidentialComplexBuilding_List = new List<int>();
+            public static List<int> Otsenka_ComplexValueAdded_List = new List<int>();
+
+            public static int scet = 0;
         }
 
         public Menu_men()
@@ -35,7 +54,7 @@ namespace Ваариант14
             InitializeComponent();
         }
         private async void Menu_men_Load(object sender, EventArgs e)
-            //настройка первычных параметров
+        //настройка первычных параметров
         {
             string ConnStr = @"Data Source=62.63.74.62,1433;
             Initial Catalog=Variant14; 
@@ -78,7 +97,7 @@ namespace Ваариант14
             listView2.View = View.Details;//отображения текста
 
 
-           // listView2.Columns.Add("жилой комплекс");
+            // listView2.Columns.Add("жилой комплекс");
             listView2.Columns.Add("номер дома");
             listView2.Columns.Add("номер квартиры");
             listView2.Columns.Add("подезд");
@@ -86,24 +105,41 @@ namespace Ваариант14
             listView2.Columns.Add("площади квартиры");
             listView2.Columns.Add("количества комнат");
             listView2.Columns.Add("статус");
-            listView2.Columns.Add("стоимость строительства");
-            listView2.Columns.Add("добавленная стоимость");
+            listView2.Columns.Add("стоимость строительства кв");
+            listView2.Columns.Add("добавленная стоимость кв");
             //добоаляем название столбы
+
+            textBox3.Visible = false;
+            textBox4.Visible = false;
+            textBox5.Visible = false;
+            textBox6.Visible = false;
+            textBox7.Visible = false;
+            //Скрываем вывод
+
+            label11.Visible = false;
+            label12.Visible = false;
+            label13.Visible = false;
+            label14.Visible = false;
+            label15.Visible = false;
+
+            textBox1.Text = Convert.ToString(0);
+            textBox2.Text = Convert.ToString(0);
+
 
             obnov();//запускаем загрузку даных 
         }
-       
+
         ////////////////////////////////////////////////////////////////////////////////////////
 
         private void obnov()
-            //запускаем загрузку даных 
+        //запускаем загрузку даных 
         {
-           HouseObnov();//метод для загрузки таблици с домами
-           ApartmentFilitr();//метод для настройки фильтра
-                  ApartmentObnov();//метод для загрузки таблици с квартирами
+            HouseObnov();//метод для загрузки таблици с домами
+            ApartmentFilitr();//метод для настройки фильтра
+            ApartmentObnov();//метод для загрузки таблици с квартирами
         }
         private void ОбновитьToolStripMenuItem_Click(object sender, EventArgs e)
-            //кнопка для обновление даных
+        //кнопка для обновление даных
         {
             obnov();
         }
@@ -112,7 +148,7 @@ namespace Ваариант14
 
 
         private void HouseObnov()
-            //метод для загрузки таблици с домами
+        //метод для загрузки таблици с домами
         {
             listView1.Items.Clear();//очишаем таблицу 
 
@@ -135,7 +171,7 @@ namespace Ваариант14
                  NoProdono = new List<object>();
             //масив для зранение столбцов вывода
 
-            string comondProto = "SELECT DISTINCT [House].[ID], [Name], [Street], [House].[Number], [Status]" +
+            string comondProto = "SELECT DISTINCT [House].[ID], [Name], [Street], [Number], [Status]" +
                 "FROM [House], [ResidentialComplex]";
             //прототип функцие конечный пезультат зависит от парамеиров в форме
 
@@ -234,8 +270,8 @@ namespace Ваариант14
                 {
                     House.Add(Convert.ToString(sqlRead["Name"]));
                     Street.Add(Convert.ToString(sqlRead["Street"]));
-                    Number.Add(Convert.ToString(sqlRead["Street"]));
-                    Status.Add(Convert.ToString(sqlRead["Street"]));
+                    Number.Add(Convert.ToString(sqlRead["Number"]));
+                    Status.Add(Convert.ToString(sqlRead["Status"]));
                     //водим результат в масивы
 
                     comendProdono.Add(new SqlCommand("SELECT COUNT(DISTINCT [IsSold]) FROM [Apartment] WHERE [HouseID] = " + Convert.ToString(sqlRead["ID"]) + " AND [IsSold] = 1", sqlConn));
@@ -280,13 +316,13 @@ namespace Ваариант14
             }
         }
         private void ComboBox1_SelectedIndexChanged(object sender, System.EventArgs e)
-            //обновление таблицы при изменением комбобокса
+        //обновление таблицы при изменением комбобокса
         {
             HouseObnov();
         }
 
-       
-        
+
+
         ////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -307,9 +343,7 @@ namespace Ваариант14
 
             comboBox2.Items.Clear();//очишаем
 
-            Glab.idHouseList.Clear();
             Glab.idResidentialComplexList.Clear();
-            Glab.strHouse.Clear();
             Glab.strResidentialComplex.Clear();
             //очищаем спарвачники
 
@@ -339,13 +373,18 @@ namespace Ваариант14
         }
 
         private void ComboBox2_SelectedIndexChanged(object sender, System.EventArgs e)
-            //метод для загрузки в комбобокс зависимый от комбобокса2
+        //метод для загрузки в комбобокс зависимый от комбобокса2
         {
             SqlDataReader sqlRead = null;//перемеена для хранение вывода  запроса
 
             SqlCommand comend = new SqlCommand();//перемеена для хранение вывода  запроса
 
             comboBox3.Items.Clear();//очишаем таблицу
+
+
+            Glab.idHouseList.Clear();
+            Glab.strHouse.Clear();
+            //jxb
 
             comboBox3.Visible = true;
             label6.Visible = true;
@@ -355,9 +394,9 @@ namespace Ваариант14
 
             foreach (int i in Glab.idResidentialComplexList)
             {
-                if("" == comboBox2.Text)//провареем не выбрано ли пусто
+                if ("" == comboBox2.Text)//провареем не выбрано ли пусто
                     break;
-               else if (Glab.strResidentialComplex[id] == comboBox2.Text)//находим выбраный ЖК
+                else if (Glab.strResidentialComplex[id] == comboBox2.Text)//находим выбраный ЖК
                     break;
 
                 id++;//вычеслем id выброного ЖК
@@ -452,7 +491,7 @@ namespace Ваариант14
             if (sqlRead != null)
                 sqlRead.Close();//проверка на откратасть 
 
-            sqlRead =comend.ExecuteReader();//запрос в базу
+            sqlRead = comend.ExecuteReader();//запрос в базу
 
             comboBox6.Items.Add("");
             //вставлем пустую строку как выбор нечиго
@@ -469,9 +508,9 @@ namespace Ваариант14
             sqlRead.Close();//закрываем запрс
         }
 
-       
-        
-        
+
+
+
         ////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -483,15 +522,18 @@ namespace Ваариант14
             listView2.Items.Clear();//очишаем таблицу
 
             string commendProto = "SELECT  DISTINCT " +
+                                    "[ID]," +
                                     "[HouseID] ," +
-                                 " [Number] AS [kvart], " +
+                                 " [Apartment].[Number] AS [kvart], " +
                                   "[Section] ," +
                                   "[Floor]  ," +
                                  "[Area]," +
                                  " [CountOfRooms]," +
                                  " [IsSold]," +
-                                 " [BuildingCost] AS [Building]," +
-                                 " [ApartmentValueAdded] AS [ValueAdded]" +
+
+                                 " [Apartment].[BuildingCost] AS [ApartmentBuilding]," +
+                                 " [ApartmentValueAdded]" +
+
 
                                  "FROM [Apartment]";
             //прототип запроса
@@ -510,7 +552,10 @@ namespace Ваариант14
                     {
                         comend = new SqlCommand(
                                     commendProto +
-                                    "WHERE [Apartment].[HouseID] = @house AND [Section] = @section AND [Floor] = @floor AND [IsSold] = @isSold",
+                                    "WHERE [Apartment].[HouseID] = @house" +
+                                    " AND [Section] = @section" +
+                                    " AND [Floor] = @floor" +
+                                    " AND [IsSold] = @isSold",
                                      sqlConn);
 
                         comend.Parameters.AddWithValue("house", Glab.idHouse);
@@ -530,7 +575,9 @@ namespace Ваариант14
                     {
                         comend = new SqlCommand(
                                    commendProto +
-                                    "WHERE [Apartment].[HouseID] = @house AND [Section] = @section AND [IsSold] = @isSold",
+                                    "WHERE [Apartment].[HouseID] = @house" +
+                                    " AND [Section] = @section " +
+                                    "AND [IsSold] = @isSold",
                                      sqlConn);
 
                         comend.Parameters.AddWithValue("house", Glab.idHouse);
@@ -640,23 +687,16 @@ namespace Ваариант14
 
                 else
                 {
-                    comend = new SqlCommand(
-                                    "SELECT  DISTINCT " +
-                                    "[HouseID] ," +
-                                     " [Apartment].[Number] AS [kvart], " +
-                                      "[Section] ," +
-                                      "[Floor]  ," +
-                                     "[Area]," +
-                                     " [CountOfRooms]," +
-                                     " [IsSold]," +
-                                     " [Apartment].[BuildingCost] AS [Building]," +
-                                     " [ApartmentValueAdded] AS [ValueAdded]" +
+                    commendProto += "WHERE [HouseID] = @ID";
 
-                                     "FROM [Apartment],[House]" +
-                                     "WHERE [ResidentialComplexID] = @ID",
-                                     sqlConn);
+                    foreach (int i in Glab.idHouseList)
+                    {
+                        commendProto += " OR [HouseID] = '" + i + "'";
+                    }
 
-                    comend.Parameters.AddWithValue("ID", Glab.idResidentialComplex);
+                    comend = new SqlCommand(commendProto, sqlConn);
+
+                    comend.Parameters.AddWithValue("ID", 0);
                 }
             }
 
@@ -672,24 +712,257 @@ namespace Ваариант14
                 listView2.Items.Add
                       (new ListViewItem(new string[]
                           {
-                             Convert.ToString(sqlRead["HouseID"]),
+                              Convert.ToString(sqlRead["HouseID"]),//
                               Convert.ToString(sqlRead["kvart"]),
                               Convert.ToString(sqlRead["Section"]),
                               Convert.ToString(sqlRead["Floor"]),
-                              Convert.ToString(sqlRead["Area"]),
-                              Convert.ToString(sqlRead["CountOfRooms"]),
-                              Convert.ToString(sqlRead["IsSold"]),
-                              Convert.ToString(sqlRead["Building"]),
-                              Convert.ToString(sqlRead["ValueAdded"])
+                              Convert.ToString(sqlRead["Area"]),//
+                              Convert.ToString(sqlRead["CountOfRooms"]),//
+                              Convert.ToString(sqlRead["IsSold"]),//
+                              Convert.ToString(sqlRead["ApartmentBuilding"]),//
+                              Convert.ToString(sqlRead["ApartmentValueAdded"])//
                         })//водим результат в таблицу 
                       );
+
+                Glab.Otsenka_IdHouse_List.Add(Convert.ToInt32(sqlRead["HouseID"]));
+                Glab.Otsenka_IdApartment_List.Add(Convert.ToInt32(sqlRead["ID"]));
+
+                Glab.Otsenka_Area_List.Add(Convert.ToInt32(sqlRead["Area"]));
+                Glab.Otsenka_CountOfRooms_List.Add(Convert.ToInt32(sqlRead["CountOfRooms"]));
+
+                Glab.Otsenka_ApartmentBuilding_List.Add(Convert.ToInt32(sqlRead["ApartmentBuilding"]));
+                Glab.Otsenka_ApartmentValueAdded_List.Add(Convert.ToInt32(sqlRead["ApartmentValueAdded"]));
+
+                Glab.Otsenka_IsSold_List.Add(Convert.ToString(sqlRead["IsSold"]));
+                
+
+                Glab.scet++;
             }
             if (sqlRead != null)
                 sqlRead.Close();//проверка на откратасть 
         }
+        //метод для вывода информаци о квартирах
         private void ApartmentButton_Click(object sender, EventArgs e)
         {
             ApartmentObnov();
+        }
+        //кнопка для обновление данных
+
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+
+        private void Otsenka()
+        {
+            SqlDataReader sqlRead = null;
+
+            string commendProto = "SELECT  DISTINCT " +
+                                    "[ID]," +
+                                    "[ResidentialComplexID] ," +
+                                 " [BuildingCost]," +
+                                 " [HouseValueAdded]" +
+
+                                 "FROM [House]";
+            //прототип запроса
+
+            SqlCommand comend = new SqlCommand();
+            //команда зпроса
+
+            int id = 0,
+                idHouse = 0,
+                idResidentialComplex = 0,
+
+                sumStoim = 0,
+                sumStoimTrue = 0,
+                sumStoimFalse = 0,
+                sumZatrat = 0,
+                pribyl = 0;
+
+            {
+               
+                commendProto += "WHERE [ID] = @id";
+
+                foreach (int i in Glab.Otsenka_IdHouse_List)
+                {
+                    commendProto += " OR [ID] = '" + i + "'";
+                }
+
+                comend = new SqlCommand(commendProto, sqlConn);
+
+                comend.Parameters.AddWithValue("id", 0);
+
+
+                if (sqlRead != null)
+                    sqlRead.Close();
+
+                sqlRead = comend.ExecuteReader();//запрос в базу
+
+                while (sqlRead.Read())
+                {
+                    Glab.Otsenka_HouseBuilding_List.Add(Convert.ToInt32(sqlRead["BuildingCost"]));
+                    Glab.Otsenka_HouseValueAdded_List.Add(Convert.ToInt32(sqlRead["HouseValueAdded"]));
+
+                    Glab.Otsenka_IdResidentialComplex_List.Add(Convert.ToInt32(sqlRead["ResidentialComplexID"]));
+                }
+
+            }
+
+
+            /////////////////////////////////////////////////////////////////////////////////
+
+             if (sqlRead != null)
+                sqlRead.Close();
+
+            id = 0;
+                {
+
+                    commendProto = "SELECT  DISTINCT " +
+                                            "[ID]," +
+                                         " [BuildingCost]," +
+                                         " [ComplexValueAdded] " +
+
+                                         "FROM [ResidentialComplex]";
+                    //прототип запроса
+
+                    commendProto += "WHERE [ID] = @id";
+
+                    foreach (int i in Glab.Otsenka_IdResidentialComplex_List)
+                    {
+                        commendProto += " OR [ID] = '" + i + "'";
+                    }
+
+                    comend = new SqlCommand(commendProto, sqlConn);
+
+                    comend.Parameters.AddWithValue("id", 0);
+
+                    sqlRead = comend.ExecuteReader();//запрос в базу
+
+                    while (sqlRead.Read())
+                    {
+                        Glab.Otsenka_ResidentialComplexBuilding_List.Add(Convert.ToInt32(sqlRead["BuildingCost"]));
+                        Glab.Otsenka_ComplexValueAdded_List.Add(Convert.ToInt32(sqlRead["ComplexValueAdded"]));
+                    }
+
+                }
+            id = 0;
+
+            int ResidentialComplex = Glab.Otsenka_IdResidentialComplex_List[0],
+                House = Glab.Otsenka_IdHouse_List[0];
+
+                for (int i = 0; i < Glab.Otsenka_IsSold_List.Count; i++)
+                {
+                    if (id != Glab.Otsenka_ApartmentBuilding_List.Count)
+                    {
+                        if (Glab.Otsenka_IdResidentialComplex_List[idHouse] != ResidentialComplex)
+                        {
+                            ResidentialComplex = Glab.Otsenka_IdResidentialComplex_List[idHouse];
+
+                            sumZatrat += Glab.Otsenka_ResidentialComplexBuilding_List[idResidentialComplex];
+
+                            idResidentialComplex++;
+                        }
+                        else if (Glab.Otsenka_IdHouse_List[id] != House)
+                        {
+                            sumZatrat += Glab.Otsenka_HouseBuilding_List[idHouse];
+
+                            idHouse++;
+
+                            House = Glab.Otsenka_IdHouse_List[id];
+                        }
+                          sumZatrat += Glab.Otsenka_ApartmentBuilding_List[id];
+
+                            if (Glab.Otsenka_IsSold_List[id] == "True")
+                            {
+                                sumStoimTrue += Glab.Otsenka_Area_List[id] * Convert.ToInt32(textBox1.Text) +
+                                               Glab.Otsenka_CountOfRooms_List[id] * Convert.ToInt32(textBox2.Text) +
+                                               Glab.Otsenka_ApartmentValueAdded_List[id] +
+                                               Glab.Otsenka_HouseValueAdded_List[idHouse] +
+                                               Glab.Otsenka_ComplexValueAdded_List[idResidentialComplex];
+                            }
+
+                            else if (Glab.Otsenka_IsSold_List[id] == "False")
+                            {
+                                sumStoimFalse += Glab.Otsenka_Area_List[id] * Convert.ToInt32(textBox1.Text) +
+                                               Glab.Otsenka_CountOfRooms_List[id] * Convert.ToInt32(textBox2.Text) +
+                                               Glab.Otsenka_ApartmentValueAdded_List[id] +
+                                               Glab.Otsenka_HouseValueAdded_List[idHouse] +
+                                               Glab.Otsenka_ComplexValueAdded_List[idResidentialComplex];
+                            }
+                        
+                        id++;
+                    }
+                }
+                id++;
+            
+
+            sumStoim = sumStoimFalse + sumStoimTrue;
+
+
+
+            pribyl = sumStoim - sumZatrat;
+
+            {
+                textBox3.Visible = true;
+                textBox4.Visible = true;
+                textBox5.Visible = true;
+                textBox6.Visible = true;
+                textBox7.Visible = true;
+
+
+                label11.Visible = true;
+                label12.Visible = true;
+                label13.Visible = true;
+                label14.Visible = true;
+                label15.Visible = true;
+                //вывод
+
+                textBox3.Text = Convert.ToString(sumStoim);
+                textBox4.Text = Convert.ToString(sumStoimTrue);
+                textBox5.Text = Convert.ToString(sumStoimFalse);
+                textBox6.Text = Convert.ToString(sumZatrat);
+                textBox7.Text = Convert.ToString(pribyl);
+            }
+
+            sqlRead.Close();
+        }
+
+        private void OtsenkaButton_Click(object sender, EventArgs e)
+        {
+            Otsenka();
+        }
+
+        private void ИзменитьКоэфицентToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (listView2.SelectedItems.Count > 0)
+            {
+                SqlCommand commend = new SqlCommand("SELECT  DISTINCT " +
+                                         "[ID]" +
+
+                                      "FROM [ResidentialComplex]" +
+                                      "WHERE [ID] = @id", sqlConn);
+                //прототип запроса
+
+
+
+
+                commend.Parameters.AddWithValue("id", Glab.Otsenka_IdHouse_List[Convert.ToInt32(listView2.SelectedItems[0].SubItems[0].Text)]);
+
+                SqlDataReader sqlRead;
+
+                sqlRead = commend.ExecuteReader();//запрос в базу
+
+                int ZK = 0;
+                while (sqlRead.Read())
+                {
+                    ZK = Convert.ToInt32(sqlRead["ID"]);
+                }
+
+                Update up = new Update(Glab.Otsenka_IdApartment_List[Convert.ToInt32(listView2.SelectedItems[0].SubItems[0].Text) - 1],
+                                        Glab.Otsenka_IdHouse_List[Convert.ToInt32(listView2.SelectedItems[0].SubItems[0].Text) - 1],
+                                        ZK);
+                up.Show();
+
+                sqlRead.Close();
+            }
         }
     }
 }
